@@ -13,13 +13,13 @@ class CurrencyViewModel: ObservableObject {
 
     var subscription = Set<AnyCancellable>()
     
-    let authkey = "HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW"
+//    let authkey = "HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW"
     var searchdate = "20240124"
     
         var baseUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW&searchdate=20240124&data=AP01"
     //    var baseUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=\(authkey)&searchdate=\(searchdate)&data=AP01"
 
-    @Published var responseCurrencyData = [ResponseCurrencyData]()
+//    @Published var responseCurrencyData = [ResponseCurrencyData]()
 
     init() {
         print(#fileID, #function, #line, "")
@@ -28,16 +28,37 @@ class CurrencyViewModel: ObservableObject {
     
     func fetchCurrencyData(){
         
-        print(#fileID, #function, #line, "")
-        AF.request(baseUrl)
-            .publishDecodable(type: ResponseCurrencyData.self)
-            .compactMap{ $0.value }
-            .sink(receiveCompletion: { completion in
-                print("데이터스트림 완료")
-            }, receiveValue: {receivedValue in
+//        print(#fileID, #function, #line, "")
+//        AF.request(baseUrl)
+//            .publishDecodable(type: ResponseCurrencyData.self)
+//            .compactMap{ $0.value }
+//            .sink(receiveCompletion: { completion in
+//                print("데이터스트림 완료")
+//            }, receiveValue: {receivedValue in
 //                  print("받은 값 : \(receivedValue.count)")
 //                self.responseCurrencyData = receivedValue
-            }).store(in: &subscription)
+//            }).store(in: &subscription)
+        
+        let url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON"
+
+        AF.request(url,
+                   method: .get,
+                   parameters: ["authkey" : "HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW", "searchdate" : "20240124", "data" : "AP01"],
+                   encoding: URLEncoding.default,
+                   headers: ["Content-Type":"application/json", "Accept":"application/json"])
+            .validate(statusCode: 200..<300)
+            .responseJSON { response in
+                 print(response)
+            /** 서버로부터 받은 데이터 활용 */
+            switch response.result {
+            case .success(let data): print("성공")
+//                String(data: response.data!, encoding: .utf8)
+                /** 정상적으로 reponse를 받은 경우 */
+            case .failure(let _error): print("실패")
+                /** 그렇지 않은 경우 */
+            }
+        }
+        
     }
     
 }
