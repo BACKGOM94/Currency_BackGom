@@ -10,19 +10,23 @@ import SwiftUI
 
 struct FlagImgRowView: View {
     
-    var countryCode: String
     
+    var responseData : ResponseCurrencyData
+    
+    init(_ responseData: ResponseCurrencyData) {
+        self.responseData = responseData
+    }
     var body : some View {
         
         HStack{
             FlagImagView(imageUrl: URL(string:"https://randomuser.me/api/portraits/women/70.jpg")!)
                 
             VStack{
-                Text(countryCode)
-                Text("대한민국 원")
+                Text(responseData.cur_unit)
+                Text(responseData.cur_nm)
             }
             Spacer()
-            Text("$10000")
+            Text(responseData.ttb)
                 .fontWeight(.heavy)
                 .frame(width: 90, height: 30)
                 .background(.green)
@@ -33,9 +37,21 @@ struct FlagImgRowView: View {
     }
 }
 
+//"result": 1,
+//"cur_unit": "AED",
+//"ttb": "288.78",
+//"tts": "294.61",
+//"deal_bas_r": "291.7",
+//"bkpr": "291",
+//"yy_efee_r": "0",
+//"ten_dd_efee_r": "0",
+//"kftc_bkpr": "291",
+//"kftc_deal_bas_r": "291.7",
+//"cur_nm": "아랍에미리트 디르함"
+
+
 struct FlagImgRowView_Previews: PreviewProvider {
     static var previews: some View {
-        let countryCode = "KRW"
-        FlagImgRowView(countryCode: countryCode)
+        FlagImgRowView(ResponseCurrencyData.getDummy())
     }
 }
