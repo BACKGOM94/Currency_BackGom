@@ -12,8 +12,8 @@ struct ContentView: View {
     @StateObject var currencyViewModel = CurrencyViewModel()
     
     var body: some View {
-        List(0 ... 20, id: \.self) { index in
-            FlagImgRowView(countryCode: "KRW")
+        List(currencyViewModel.responseCurrencyData) { currencyData in
+            FlagImgRowView(currencyData)
         }
     }
 }

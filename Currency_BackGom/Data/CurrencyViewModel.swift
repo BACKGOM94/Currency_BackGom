@@ -19,7 +19,7 @@ class CurrencyViewModel: ObservableObject {
         var baseUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW&searchdate=20240124&data=AP01"
     //    var baseUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=\(authkey)&searchdate=\(searchdate)&data=AP01"
 
-//    @Published var responseCurrencyData = [ResponseCurrencyData]()
+    @Published var responseCurrencyData = [ResponseCurrencyData]()
 
     init() {
         print(#fileID, #function, #line, "")
@@ -52,8 +52,11 @@ class CurrencyViewModel: ObservableObject {
             /** 서버로부터 받은 데이터 활용 */
             switch response.result {
             case .success(let data): print("성공")
-//                String(data: response.data!, encoding: .utf8)
-                /** 정상적으로 reponse를 받은 경우 */
+                do {
+                    self.responseCurrencyData = try JSONDecoder().decode([ResponseCurrencyData].self, from: response.data!)
+                } catch let parsingError {
+                    print("Error:", parsingError)
+                }
             case .failure(let _error): print("실패")
                 /** 그렇지 않은 경우 */
             }
