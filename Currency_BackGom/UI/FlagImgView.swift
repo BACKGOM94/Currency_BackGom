@@ -12,25 +12,24 @@ import URLImage
 
 struct FlagImagView: View {
     
-    var imageUrl : URL
+    var imageName : String
     
     var body : some View {
         
-        URLImage(imageUrl,
-                 content: { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 60, height: 60)
-        }).cornerRadius(15)
+        Image(imageName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 60, height: 60)
+            .cornerRadius(15)
+
     }
 }
 
 struct FlagImagView_Previews: PreviewProvider {
     static var previews: some View {
+
+        var imageName = "CAD"
         
-        let url = URL(string: "https://randomuser.me/api/portraits/women/70.jpg")!
-        
-        FlagImagView(imageUrl: url)
+        FlagImagView(imageName: imageName)
     }
 }

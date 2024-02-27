@@ -12,25 +12,42 @@ struct FlagImgRowView: View {
     
     
     var responseData : ResponseCurrencyData
-    
+    let numberFormatter: NumberFormatter = NumberFormatter()
+
     init(_ responseData: ResponseCurrencyData) {
         self.responseData = responseData
+        self.numberFormatter.numberStyle = .decimal
     }
+    
     var body : some View {
         
+        
         HStack{
-            FlagImagView(imageUrl: URL(string:"https://randomuser.me/api/portraits/women/70.jpg")!)
+            
+            FlagImagView(imageName: responseData.cur_unit)
                 
-            VStack{
+            VStack(alignment: .leading){
                 Text(responseData.cur_unit)
                 Text(responseData.cur_nm)
             }
             Spacer()
-            Text(responseData.ttb)
-                .fontWeight(.heavy)
-                .frame(width: 90, height: 30)
-                .background(.green)
-                .cornerRadius(10)
+            
+            if responseData.cur_unit == "KRW" {
+                Text("1000")
+                    .fontWeight(.heavy)
+                    .frame(width: 90, height: 30)
+                    .background(.green)
+                    .cornerRadius(10)
+            } else {
+                
+                var tts = numberFormatter.number(from:responseData.tts)?.stringValue
+                
+                Text( String(Double(tts ?? "") ?? 0 * 1000))
+                    .fontWeight(.heavy)
+                    .frame(width: 90, height: 30)
+                    .background(.green)
+                    .cornerRadius(10)
+            }
                 
             
         }
