@@ -14,14 +14,20 @@ class CurrencyViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
 //    let authkey = "HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW"
-    var searchdate = "20240124"
     
-        var baseUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW&searchdate=20240124&data=AP01"
+    var formatter = DateFormatter()
+
+    
+    var searchdate : String = ""
+    
+     //   var baseUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=HCpmZzWbGKEX9C8ivxyLeQJdnQsfulOW&searchdate=20240124&data=AP01"
     //    var baseUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=\(authkey)&searchdate=\(searchdate)&data=AP01"
 
     @Published var responseCurrencyData = [ResponseCurrencyData]()
 
     init() {
+        self.formatter.dateFormat = "yyyyMMdd"
+        searchdate = formatter.string(from: Date())
         print(#fileID, #function, #line, "")
         fetchCurrencyData()
     }
@@ -51,13 +57,13 @@ class CurrencyViewModel: ObservableObject {
                  print(response)
             /** 서버로부터 받은 데이터 활용 */
             switch response.result {
-            case .success(let data): print("성공")
+            case .success(let data): print("성공 : \(data)")
                 do {
                     self.responseCurrencyData = try JSONDecoder().decode([ResponseCurrencyData].self, from: response.data!)
                 } catch let parsingError {
                     print("Error:", parsingError)
                 }
-            case .failure(let _error): print("실패")
+            case .failure(let _error): print("실패 : \(_error)")
                 /** 그렇지 않은 경우 */
             }
         }
